@@ -1,0 +1,13 @@
+
+*.class
+
+
+ScratchPad.java
+ScratchPad.class
+
+
+bin/
+out/
+.idea/
+.vscode/
+.DS_Store
