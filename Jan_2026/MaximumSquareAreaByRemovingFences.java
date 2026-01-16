@@ -26,8 +26,10 @@ public class MaximumSquareAreaByRemovingFences {
 
         allHFences[hFences.length + 1] = m;
         allVFences[vFences.length + 1] = n;
+
         int Hidx = 1;
         int Vidx = 1;
+
         for (int i = 0; i < hFences.length; i++) {
             allHFences[Hidx++] = hFences[i];
         }
@@ -38,44 +40,31 @@ public class MaximumSquareAreaByRemovingFences {
         Arrays.sort(allHFences);
         Arrays.sort(allVFences);
 
-        HashMap<Integer, Integer> hM = new HashMap<>();
-        HashMap<Integer, Integer> vM = new HashMap<>();
+        HashSet<Integer> hM = new HashSet<>();
+        HashSet<Integer> vM = new HashSet<>();
 
         for (int i = 0; i < allHFences.length; i++) {
-            int maxdist = 0;
-            for (int j = 0; j < allHFences.length; j++) {
-                if (i != j) {
-                    if (
-                        Math.max(maxdist, allHFences[i] - allHFences[j]) >
-                        maxdist
-                    ) {
-                        maxdist = allHFences[i] - allHFences[j];
-                        hM.put(allHFences[i], maxdist);
-                    }
-                }
-            }
-        }
-        for (int i = 0; i < allVFences.length; i++) {
-            int maxdist = 0;
-            for (int j = 0; j < allVFences.length; j++) {
-                if (i != j) {
-                    if (
-                        Math.max(maxdist, allVFences[i] - allVFences[j]) >
-                        maxdist
-                    ) {
-                        maxdist = allVFences[i] - allVFences[j];
-                        vM.put(allVFences[i], maxdist);
-                    }
-                }
-            }
-        }
-        int area = -1;
-        for (Integer i : hM.values()) {
-            if (vM.containsValue(i)) {
-                area = Math.max(area, i * i);
+            for (int j = i + 1; j < allHFences.length; j++) {
+                hM.add(allHFences[j] - allHFences[i]);
             }
         }
 
-        return area;
+        int maxSide = -1;
+
+        for (int i = 0; i < allVFences.length; i++) {
+            for (int j = i + 1; j < allVFences.length; j++) {
+                int d = allVFences[j] - allVFences[i];
+                if (hM.contains(d)) {
+                    maxSide = Math.max(maxSide, d);
+                }
+            }
+        }
+
+        if (maxSide == -1) {
+            return -1;
+        }
+
+        long area = (long) maxSide * maxSide;
+        return (int) (area % 1000000007);
     }
 }
